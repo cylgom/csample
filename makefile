@@ -1,7 +1,8 @@
-NAME = zip
+NAME = sample
 CC = gcc
 FLAGS = -std=c99 -pedantic -g
 FLAGS+= -Wall -Wno-unused-parameter -Wextra -Werror=vla -Werror
+VALGRIND = --show-leak-kinds=all --track-origins=yes --leak-check=full
 
 BIND = bin
 OBJD = obj
@@ -31,8 +32,11 @@ $(BIND)/$(NAME): $(OBJS)
 	@$(CC) -o $@ $^ $(LINK)
 
 run:
-	./$(BIND)/$(NAME)
+	@cd $(BIND) && ./$(NAME)
+
+leakgrind: $(BIND)/$(NAME)
+	@cd $(BIND) && valgrind $(VALGRIND) 2> ../valgrind.log ./$(NAME)
 
 clean:
 	@echo "cleaning"
-	@rm -rf $(BIND) $(OBJD)
+	@rm -rf $(BIND) $(OBJD) valgrind.log
