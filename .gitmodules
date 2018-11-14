@@ -1,0 +1,6 @@
+[submodule "sub/ctypes"]
+	path = sub/ctypes
+	url = https://github.com/cylgom/ctypes.git
+[submodule "sub/argoat"]
+	path = sub/argoat
+	url = https://github.com/cylgom/argoat.git
