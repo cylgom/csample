@@ -8,25 +8,38 @@ BIND = bin
 OBJD = obj
 SRCD = src
 SUBD = sub
+TESTD = tests
 
 INCL = -I$(SRCD)
 INCL+= -I$(SUBD)/ctypes
 INCL+= -I$(SUBD)/argoat/src
+INCL+= -I$(SUBD)/testoasterror/src
 
-SRCS = $(SRCD)/main.c
-SRCS+= $(SUBD)/argoat/src/argoat.c
+FINAL = $(SRCD)/main.c
+FINAL+= $(SUBD)/argoat/src/argoat.c
 
-OBJS:= $(patsubst $(SRCD)/%.c,$(OBJD)/$(SRCD)/%.o,$(SRCS))
+TESTS = $(TESTD)/main.c
+TESTS+= $(SUBD)/testoasterror/src/testoasterror.c
 
-.PHONY: all
-all: $(BIND)/$(NAME) run
+SRCS =
 
+FINAL_OBJS:= $(patsubst %.c,$(OBJD)/%.o,$(FINAL))
+SRCS_OBJS := $(patsubst %.c,$(OBJD)/%.o,$(SRCS))
+TESTS_OBJS:= $(patsubst %.c,$(OBJD)/%.o,$(TESTS))
+
+# aliases
+.PHONY: final
+final: $(BIND)/$(NAME)
+tests: $(BIND)/tests
+
+# generic compiling command
 $(OBJD)/%.o: %.c
 	@echo "building object $@"
 	@mkdir -p $(@D)
 	@$(CC) $(INCL) $(FLAGS) -c -o $@ $<
 
-$(BIND)/$(NAME): $(OBJS)
+# final executable
+$(BIND)/$(NAME): $(SRCS_OBJS) $(FINAL_OBJS)
 	@echo "compiling executable $@"
 	@mkdir -p $(@D)
 	@$(CC) -o $@ $^ $(LINK)
@@ -34,6 +47,16 @@ $(BIND)/$(NAME): $(OBJS)
 run:
 	@cd $(BIND) && ./$(NAME)
 
+# tests executable
+$(BIND)/tests: $(SRCS_OBJS) $(TESTS_OBJS)
+	@echo "compiling tests"
+	@mkdir -p $(@D)
+	@$(CC) -o $@ $^ $(LINK)
+
+check:
+	@cd $(BIND) && ./tests
+
+# tools
 leakgrind: $(BIND)/$(NAME)
 	@rm -f valgrind.log
 	@cd $(BIND) && valgrind $(VALGRIND) 2> ../valgrind.log ./$(NAME)

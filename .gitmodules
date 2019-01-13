@@ -4,3 +4,6 @@
 [submodule "sub/argoat"]
 	path = sub/argoat
 	url = https://github.com/cylgom/argoat.git
+[submodule "sub/testoasterror"]
+	path = sub/testoasterror
+	url = https://github.com/cylgom/testoasterror.git
