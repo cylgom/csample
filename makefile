@@ -61,6 +61,10 @@ leakgrind: $(BIND)/$(NAME)
 	@rm -f valgrind.log
 	@cd $(BIND) && valgrind $(VALGRIND) 2> ../valgrind.log ./$(NAME)
 
+leakgrindcheck: $(BIND)/tests
+	@rm -f valgrind.log
+	@cd $(BIND) && valgrind $(VALGRIND) 2> ../valgrind.log ./tests
+
 clean:
 	@echo "cleaning"
 	@rm -rf $(BIND) $(OBJD) valgrind.log
