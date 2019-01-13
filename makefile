@@ -35,6 +35,7 @@ run:
 	@cd $(BIND) && ./$(NAME)
 
 leakgrind: $(BIND)/$(NAME)
+	@rm -f valgrind.log
 	@cd $(BIND) && valgrind $(VALGRIND) 2> ../valgrind.log ./$(NAME)
 
 clean:
