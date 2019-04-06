@@ -3,6 +3,7 @@ CC = gcc
 FLAGS = -std=c99 -pedantic -g
 FLAGS+= -Wall -Wno-unused-parameter -Wextra -Werror=vla -Werror
 VALGRIND = --show-leak-kinds=all --track-origins=yes --leak-check=full
+CMD = ./$(NAME)
 
 BIND = bin
 OBJD = obj
@@ -45,7 +46,7 @@ $(BIND)/$(NAME): $(SRCS_OBJS) $(FINAL_OBJS)
 	@$(CC) -o $@ $^ $(LINK)
 
 run:
-	@cd $(BIND) && ./$(NAME)
+	@cd $(BIND) && $(CMD)
 
 # tests executable
 $(BIND)/tests: $(SRCS_OBJS) $(TESTS_OBJS)
@@ -57,13 +58,17 @@ check:
 	@cd $(BIND) && ./tests
 
 # tools
+leak: leakgrind
 leakgrind: $(BIND)/$(NAME)
 	@rm -f valgrind.log
-	@cd $(BIND) && valgrind $(VALGRIND) 2> ../valgrind.log ./$(NAME)
+	@cd $(BIND) && valgrind $(VALGRIND) 2> ../valgrind.log $(CMD)
+	@less valgrind.log
 
+leakcheck: leakgrindcheck
 leakgrindcheck: $(BIND)/tests
 	@rm -f valgrind.log
-	@cd $(BIND) && valgrind $(VALGRIND) 2> ../valgrind.log ./tests
+	@cd $(BIND) && valgrind $(VALGRIND) 2> ../valgrind.log $(CMD)
+	@less valgrind.log
 
 clean:
 	@echo "cleaning"
