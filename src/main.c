@@ -28,5 +28,7 @@ int main(int argc, char** argv)
 	struct argoat args = {sprigs, ARG_COUNT, unflagged, 0, 32};
 	argoat_graze(&args, argc, argv);
 
+	printf("it works\n");
+
 	return 0;
 }
