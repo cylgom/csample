@@ -1,4 +1,4 @@
-NAME = sample
+NAME = csample
 CC = gcc
 FLAGS = -std=c99 -pedantic -g
 FLAGS+= -Wall -Wno-unused-parameter -Wextra -Werror=vla -Werror
@@ -74,7 +74,12 @@ clean:
 	@echo "cleaning"
 	@rm -rf $(BIND) $(OBJD) valgrind.log
 
-github:
+remotes:
+	@echo "registering remotes"
+	@git remote add github git@github.com:cylgom/$(NAME).git
+	@git remote add gitea git@git.cylgom.net:2999/cylgom/$(NAME).git
+
+github: remotes
 	@echo "sourcing submodules from https://github.com"
 	@cp .github .gitmodules
 	@git submodule sync
@@ -82,7 +87,7 @@ github:
 	@cd $(SUBD)/argoat && make github
 	@git submodule update --init --recursive --remote
 
-gitea:
+gitea: remotes
 	@echo "sourcing submodules from https://git.cylgom.net"
 	@cp .gitea .gitmodules
 	@git submodule sync
