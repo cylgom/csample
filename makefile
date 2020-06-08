@@ -3,6 +3,7 @@ CC = gcc
 FLAGS = -std=c99 -pedantic -g
 FLAGS+= -Wall -Wno-unused-parameter -Wextra -Werror=vla -Werror
 VALGRIND = --show-leak-kinds=all --track-origins=yes --leak-check=full
+CACHEGRIND = --tool=cachegrind --branch-sim=yes
 CMD = ./$(NAME)
 
 BIND = bin
@@ -70,9 +71,21 @@ leakgrindcheck: $(BIND)/tests
 	@cd $(BIND) && valgrind $(VALGRIND) 2> ../valgrind.log $(CMD)
 	@less valgrind.log
 
+cache: cachegrind
+cachegrind: $(BIND)/$(NAME)
+	@rm -f cachegrind.log
+	@cd $(BIND) && valgrind $(CACHEGRIND) 2> ../cachegrind.log $(CMD)
+	@less cachegrind.log
+
+cachecheck: cachegrindcheck
+cachegrindcheck: $(BIND)/tests
+	@rm -f cachegrind.log
+	@cd $(BIND) && valgrind $(CACHEGRIND) 2> ../cachegrind.log $(CMD)
+	@less cachegrind.log
+
 clean:
 	@echo "cleaning"
-	@rm -rf $(BIND) $(OBJD) valgrind.log
+	@rm -rf $(BIND) $(OBJD) valgrind.log cachegrind.log
 
 remotes:
 	@echo "registering remotes"
