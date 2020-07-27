@@ -1,9 +1,9 @@
 [submodule "sub/ctypes"]
 	path = sub/ctypes
-	url = https://git.cylgom.net/cylgom/ctypes.git
+	url = https://git.nullgemm.fr/nullgemm/ctypes.git
 [submodule "sub/argoat"]
 	path = sub/argoat
-	url = https://git.cylgom.net/cylgom/argoat.git
+	url = https://git.nullgemm.fr/nullgemm/argoat.git
 [submodule "sub/testoasterror"]
 	path = sub/testoasterror
-	url = https://git.cylgom.net/cylgom/testoasterror.git
+	url = https://git.nullgemm.fr/nullgemm/testoasterror.git
